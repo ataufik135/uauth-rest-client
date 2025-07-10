@@ -1,4 +1,4 @@
-# OpenID Connect (OIDC) Provider for Laravel Socialite
+# UAuth REST API Client for Laravel
 
 ![Laravel Support: v9, v10, v11](https://img.shields.io/badge/Laravel%20Support-v9%2C%20v10%2C%20v11-blue) ![PHP Support: 8.1, 8.2, 8.3](https://img.shields.io/badge/PHP%20Support-8.1%2C%208.2%2C%208.3-blue)
 
