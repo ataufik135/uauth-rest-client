@@ -1,6 +1,6 @@
 <?php
 
-namespace Taufik\UAuthRestClient\Middleware;
+namespace TaufikT\UAuthRestClient\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -27,7 +27,7 @@ class ApiMiddleware
       return response()->json(['message' => 'API key is required for authentication.'], 401);
     }
 
-    $requestIp = $request->getClientIp();
+    $requestIP = $request->getClientIp();
     $providerId = config('uauth.api.provider_id');
 
     $route = $request->route();
@@ -39,7 +39,7 @@ class ApiMiddleware
 
     $response = $this->apiService->get('key-verify', [
       'provider_id' => $providerId,
-      'request_ip' => $requestIp,
+      'request_ip' => $requestIP,
       'permission' => $requestSignature
     ], $apiKey);
 

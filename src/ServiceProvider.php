@@ -1,6 +1,6 @@
 <?php
 
-namespace Taufik\UAuthRestClient;
+namespace TaufikT\UAuthRestClient;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Routing\Router;
