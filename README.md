@@ -5,93 +5,41 @@
 ## Installation & Basic Usage
 
 ```bash
-composer require taufik-t/uauth-oidc-client
+composer require taufik-t/uauth-rest-client
 ```
 
-Please see the [Base Installation Guide](https://socialiteproviders.com/usage/), then follow the provider specific instructions below.
-
-### Add configuration to `config/services.php`
+### Add configuration to `config/uauth.php`
 
 ```php
-'uauth' => [
-    'base_url' => env('UAUTH_BASE_URL'),
-    'client_id' => env('UAUTH_CLIENT_ID'),
-    'client_secret' => env('UAUTH_CLIENT_SECRET'),
-    'redirect' => env('UAUTH_REDIRECT_URI'),
-],
+'api' => [
+    'base_url' => env('UAUTH_API_BASE_URL', null),
+    'ssl_verify' => env('UAUTH_API_SSL_VERIFY', true),
+    'timeout' => env('UAUTH_API_TIMEOUT', 30),
+    'connect_timeout' => env('UAUTH_API_CONNECT_TIMEOUT', 10),
+    'provider_id' => env('UAUTH_API_PROVIDER_ID', null),
+  ],
 ```
 
-The base URL must be set to the URL of your OIDC endpoint excluding the `.well-known/openid-configuration` part. For example:
-If `https://auth.company.com/.well-known/openid-configuration` is your OIDC configuration URL, then `https://auth.company.com` must be your base URL.
-
-### Add provider event listener
-
-Configure the package's listener to listen for `SocialiteWasCalled` events.
-
-#### Laravel 11+
-
-In Laravel 11, the default `EventServiceProvider` provider was removed. Instead, add the listener using the `listen` method on the `Event` facade, in your `AppServiceProvider` `boot` method.
+#### `.env`
 
 ```php
-Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
-    $event->extendSocialite('uauth', \SocialiteProviders\UAuth\Provider::class);
-});
-```
+UAUTH_API_BASE_URL="https://auth.application.com/api/v1"
+UAUTH_API_PROVIDER_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
-#### Laravel 10 or below
-
-Add the event to your listen[] array in `app/Providers/EventServiceProvider`. See the [Base Installation Guide](https://socialiteproviders.com/usage/) for detailed instructions.
-
-```php
-protected $listen = [
-    \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-        // ... other providers
-        \SocialiteProviders\UAuth\UAuthExtendSocialite::class.'@handle',
-    ],
-];
+// optional
+UAUTH_API_SSL_VERIFY=true // ubah `false` untuk development atau local
+UAUTH_API_TIMEOUT=30
+UAUTH_API_CONNECT_TIMEOUT=10
 ```
 
 ### Usage
 
-You should now be able to use the provider like you would regularly use Socialite (assuming you have the facade
-installed):
+Tambahkan middleware `sso.api` untuk memproteksi resource api:
+
+#### `routes/api.php`
 
 ```php
-return Socialite::driver('uauth')->redirect();
+Route::group(['middleware' => ['sso.api']], function () {
+    // tempatkan route resource yang ingin di proteksi disini
+});
 ```
-
-### Returned User fields
-
-- `id`
-- `name`
-- `email`
-
-More fields are available under the `user` subkey:
-
-```php
-$user = Socialite::driver('uauth')->user();
-
-$locale = $user->user['locale'];
-$email_verified = $user->user['email_verified'];
-```
-
-### Customizing the scopes
-
-You may extend the default scopes (`openid email profile`) by adding a `scopes` option to your OIDC service configuration and separate multiple scopes with a space:
-
-```php
-'uauth' => [
-    'base_url' => env('UAUTH_BASE_URL'),
-    'client_id' => env('UAUTH_CLIENT_ID'),
-    'client_secret' => env('UAUTH_CLIENT_SECRET'),
-    'redirect' => env('UAUTH_REDIRECT_URI'),
-
-    'scopes' => 'groups roles',
-    // or
-    'scopes' => env('UAUTH_SCOPES'),
-],
-```
-
----
-
-Based on the work of [jp-gauthier](https://github.com/jp-gauthier)

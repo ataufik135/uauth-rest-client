@@ -20,22 +20,10 @@ class ServiceProvider extends BaseServiceProvider
    */
   public function boot(): void
   {
-    $configPath = config_path('uauth.php');
+    $this->publishes([
+      __DIR__ . '/../config/uauth.php' => config_path('uauth.php'),
+    ], ['uauth', 'uauth-config']);
 
-    if (file_exists($configPath)) {
-      $existingConfig = include $configPath;
-      $newConfig = include __DIR__ . '/../config/uauth.php';
-
-      $mergedConfig = array_merge_recursive($existingConfig, $newConfig);
-
-      file_put_contents($configPath, "<?php\n\nreturn " . var_export($mergedConfig, true) . ";\n");
-    } else {
-      $this->publishes([
-        __DIR__ . '/../config/uauth.php' => $configPath,
-      ], 'uauth-config');
-    }
-
-    // Register middleware aliases
     $this->registerMiddleware();
   }
 

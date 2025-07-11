@@ -5,7 +5,7 @@ namespace TaufikT\UAuthRestClient\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Taufik\UAuthRestClient\Services\ApiService;
+use TaufikT\UAuthRestClient\Services\ApiService;
 
 class ApiMiddleware
 {
@@ -37,7 +37,7 @@ class ApiMiddleware
 
     $requestSignature = $request->method() . ':/' . $route->uri();
 
-    $response = $this->apiService->get('key-verify', [
+    $response = $this->apiService->get('api-key-verify', [
       'provider_id' => $providerId,
       'request_ip' => $requestIP,
       'permission' => $requestSignature
