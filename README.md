@@ -43,3 +43,21 @@ Route::group(['middleware' => ['sso.api']], function () {
     // tempatkan route resource yang ingin di proteksi disini
 });
 ```
+
+Hapus default middleware pada route api di `app\Providers\RouteServiceProvider.php`
+
+```php
+public function boot(): void
+{
+  $this->routes(function () {
+    Route::middleware('api') // hapus default middleware
+      ->prefix('api')
+      ->group(base_path('routes/api.php'));
+
+      // menjadi
+
+    Route::prefix('api')
+      ->group(base_path('routes/api.php'));
+  })
+}
+```
