@@ -22,7 +22,7 @@ composer require taufik-t/uauth-rest-client
 
 #### `.env`
 
-```php
+```ini
 UAUTH_API_BASE_URL="https://auth.application.com/api/v1"
 UAUTH_API_PROVIDER_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
